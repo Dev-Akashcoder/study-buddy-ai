@@ -34,6 +34,9 @@ if uploaded_file is not None and st.session_state.vectorstore is None:
         docs = loader.load()
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         splits = text_splitter.split_documents(docs)
+        if not splits:
+            st.error("❌ Error: I couldn't find any readable text in this PDF. If it is a scanned document or an image, I cannot read it!")
+            st.stop()
         embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         
         # Save the database into Streamlit's memory
