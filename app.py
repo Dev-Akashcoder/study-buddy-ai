@@ -11,8 +11,7 @@ from langchain_classic.chains.combine_documents import create_stuff_documents_ch
 from langchain_core.prompts import ChatPromptTemplate
 
 # --- 1. SETUP API KEY ---
-# ⚠️ REPLACE THE TEXT BELOW WITH YOUR ACTUAL GOOGLE API KEY! Keep the quotation marks!
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAhjnnh6e-V9Kb8iOV4o-Vx4tvrsydaUW0"
+
 
 # --- 2. STREAMLIT UI & MEMORY ---
 st.set_page_config(page_title="Study Buddy", page_icon="📚")
