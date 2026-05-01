@@ -1,0 +1,12 @@
+cookie:
+  expiry_days: 1
+  key: abcdef
+  name: study_buddy_cookie_v2
+credentials:
+  usernames:
+    professor:
+      email: professor@university.edu
+      name: Professor Guide
+      password: $2b$12$N9Zq/0yNUKo.bH8/hM5sH.tCjL1z3.X0eO9y0hV9M9g.N9Zq/0yNU
+preauthorized:
+  emails: []

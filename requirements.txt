@@ -1,9 +1,13 @@
 streamlit
+streamlit-authenticator
+streamlit-option-menu
+bcrypt
+pyyaml
+requests
+streamlit-lottie
+langchain
 langchain-community
-langchain-text-splitters
-langchain-huggingface
 langchain-google-genai
-langchain-classic
+langchain-huggingface
 faiss-cpu
 pypdf
-sentence-transformers
