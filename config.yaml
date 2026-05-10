@@ -1,7 +1,7 @@
 cookie:
   expiry_days: 1
   key: abcdef
-  name: study_buddy_cookie_v2
+  name: study_buddy_cookie_v5
 credentials:
   usernames:
     professor:

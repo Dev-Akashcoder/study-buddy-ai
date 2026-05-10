@@ -18,7 +18,7 @@ from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 
-# --- 1. PAGE CONFIGURATION & 3D CSS ---
+# --- 1. PAGE CONFIGURATION & CODEX UI CSS ---
 st.set_page_config(page_title="Study Buddy AI", page_icon="🎓", layout="wide")
 
 # Helper function to load animations from URL
@@ -31,58 +31,65 @@ def load_lottieurl(url: str):
     except:
         return None
 
-# Custom CSS for 3D Depth, Glassmorphism, and Hover Animations
-# Custom CSS for 3D Depth, Glassmorphism, Premium Background, and Hover Animations
+# Custom CSS for the Codex Aesthetic
 st.markdown("""
     <style>
-    /* Premium Deep Gradient Background */
+    /* 1. The Bright Blue/Purple Aura Background */
     [data-testid="stAppViewContainer"] {
-        background: linear-gradient(135deg, #0e0e11 0%, #1a1a24 50%, #2a2a3b 100%);
+        background: radial-gradient(circle at 20% 30%, #b5e8ff 0%, #4a8cff 45%, #7a3bf5 100%);
+        background-attachment: fixed;
     }
     
-    /* Frosted Glass Sidebar */
+    /* 2. Glassmorphism Sidebar (Light) */
     [data-testid="stSidebar"] {
-        background: rgba(20, 20, 28, 0.6) !important;
-        backdrop-filter: blur(15px);
-        border-right: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    
-    /* Transparent Header so it blends with the background */
-    [data-testid="stHeader"] {
-        background: transparent !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Hide Streamlit elements (kept header visible so sidebar arrow works!) */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    
-    /* 3D Floating effect for chat messages */
-    .stChatMessage {
-        border-radius: 15px;
-        background: rgba(255, 255, 255, 0.03);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(5px);
-    }
-    .stChatMessage:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+    /* 3. Make Main Text Dark & Centered */
+    h1, h2, h3 {
+        color: #111111 !important;
+        text-align: center !important;
+        font-weight: 600 !important;
     }
     
-    /* Premium Button Styling */
+    /* 4. The "Download for Windows" Black Pill Button */
     .stButton>button {
-        border-radius: 20px;
-        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
-        color: white;
-        border: none;
-        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-        transition: all 0.3s ease;
+        border-radius: 50px !important;
+        background: #111111 !important;
+        color: white !important;
+        border: none !important;
+        padding: 10px 24px !important;
+        font-weight: 500 !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+        transition: all 0.2s ease;
+        display: block;
+        margin: 0 auto; /* Centers the button */
     }
     .stButton>button:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+        transform: scale(1.05);
+        background: #333333 !important;
+        color: white !important;
     }
+
+    /* 5. The Dark "Terminal/Editor" Window at the bottom (Chat Bubbles) */
+    .stChatMessage {
+        background: rgba(20, 20, 22, 0.95) !important;
+        color: #ffffff !important;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        margin-top: 15px;
+    }
+    .stChatMessage * {
+        color: #e2e8f0 !important; /* Make chat text light gray/white */
+    }
+    
+    /* Hide default Streamlit fluff */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    [data-testid="stHeader"] {background: transparent !important;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -95,13 +102,14 @@ lottie_upload = load_lottieurl("https://lottie.host/a61c3132-8df2-463d-9d41-e946
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
-# Initialize Authenticator
+# Initialize Authenticator (Updated for newer Streamlit-Authenticator version)
 if "authenticator" not in st.session_state:
     st.session_state.authenticator = stauth.Authenticate(
         config['credentials'],
         config['cookie']['name'],
         config['cookie']['key'],
-        config['cookie']['expiry_days'])
+        config['cookie']['expiry_days']
+    )
 
 # Login Page UI
 if st.session_state.get("authentication_status") != True:
@@ -117,13 +125,11 @@ if st.session_state.get("authentication_status") is False:
 
 elif st.session_state.get("authentication_status") is None:
     # Show Registration Form below Login
-    # Show Registration Form below Login
     st.markdown("---")
     st.write("### Don't have an account?")
     try:
-        # We moved the pre_authorized parameter here!
-        email_of_registered_user, username_of_registered_user, name_of_registered_user = st.session_state.authenticator.register_user(
-        )
+        # Open registration for anyone (no pre_authorized argument)
+        email_of_registered_user, username_of_registered_user, name_of_registered_user = st.session_state.authenticator.register_user()
         if email_of_registered_user:
             st.success('User registered successfully! You can now log in above.')
             # Save the new user permanently to config.yaml
@@ -131,6 +137,7 @@ elif st.session_state.get("authentication_status") is None:
                 yaml.dump(config, file, default_flow_style=False)
     except Exception as e:
         st.error(e)
+
 elif st.session_state.get("authentication_status"):
     
     # --- 3. PREMIUM NAVIGATION MENU ---
@@ -144,9 +151,9 @@ elif st.session_state.get("authentication_status"):
             default_index=0,
             styles={
                 "container": {"padding": "0!important", "background-color": "transparent"},
-                "icon": {"color": "orange", "font-size": "18px"}, 
-                "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#eee", "border-radius":"10px"},
-                "nav-link-selected": {"background-color": "#4CAF50", "box-shadow": "0 4px 10px rgba(76,175,80,0.3)"},
+                "icon": {"color": "#111", "font-size": "18px"}, 
+                "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "rgba(255,255,255,0.2)", "border-radius":"10px", "color": "#111"},
+                "nav-link-selected": {"background-color": "rgba(255,255,255,0.4)", "box-shadow": "0 4px 10px rgba(0,0,0,0.1)", "color": "#111", "font-weight": "bold"},
             }
         )
         st.divider()
@@ -161,7 +168,13 @@ elif st.session_state.get("authentication_status"):
 
     # --- 4. APP LOGIC ---
     if selected == "AI Chat":
-        st.title("💬 Personalized Study Buddy")
+        # Codex Style Centered Title Header
+        st.markdown("""
+            <div style='text-align: center; margin-bottom: 30px;'>
+                <h1 style='font-size: 3.5rem; margin-bottom: 0px;'>Study Buddy AI</h1>
+                <p style='color: #222; font-size: 1.2rem;'>A smart agent that helps you learn and study with AI.</p>
+            </div>
+        """, unsafe_allow_html=True)
         
         if "vectorstore" not in st.session_state:
             st.info("👈 Please go to 'Upload Documents' in the sidebar to upload your course materials first!")
@@ -181,7 +194,7 @@ elif st.session_state.get("authentication_status"):
             question_answer_chain = create_stuff_documents_chain(llm, prompt)
             rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
-            # Display previous chat history
+            # Display previous chat history (Codex dark mode style)
             for message in st.session_state.chat_history:
                 avatar_icon = "🧑‍🎓" if message["role"] == "user" else "🤖"
                 with st.chat_message(message["role"], avatar=avatar_icon):
