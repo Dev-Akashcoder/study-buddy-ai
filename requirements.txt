@@ -1,13 +1,12 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
 streamlit
-streamlit-authenticator
 streamlit-option-menu
-bcrypt
-pyyaml
-requests
-streamlit-lottie
+streamlit-authenticator
 langchain
 langchain-community
-langchain-google-genai
 langchain-huggingface
+langchain-google-genai
 faiss-cpu
+sentence-transformers
 pypdf
