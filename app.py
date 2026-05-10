@@ -31,59 +31,89 @@ def load_lottieurl(url: str):
     except:
         return None
 
-# Custom CSS for the Codex Aesthetic
+# Custom CSS for the Soft Pink Cloud Aesthetic & Dark Mode Support
 st.markdown("""
     <style>
-    /* 1. The Bright Blue/Purple Aura Background */
+    /* 1. Base App Background (Light Mode: Whitish Pink Cloud) */
     [data-testid="stAppViewContainer"] {
-        background: radial-gradient(circle at 20% 30%, #b5e8ff 0%, #4a8cff 45%, #7a3bf5 100%);
+        background: radial-gradient(circle at top left, #ffffff 0%, #fff0f5 50%, #ffe6f2 100%);
         background-attachment: fixed;
     }
-    
-    /* 2. Glassmorphism Sidebar (Light) */
-    [data-testid="stSidebar"] {
-        background: rgba(255, 255, 255, 0.1) !important;
-        backdrop-filter: blur(20px);
-        border-right: 1px solid rgba(255, 255, 255, 0.2);
+
+    /* Dark Mode Auto-Adapt (Deep Purple/Pink Cloud) */
+    @media (prefers-color-scheme: dark) {
+        [data-testid="stAppViewContainer"] {
+            background: radial-gradient(circle at top left, #1a1025 0%, #2d1b38 50%, #4a154b 100%);
+        }
     }
 
-    /* 3. Make Main Text Dark & Centered */
+    /* 2. Glassmorphism Sidebar */
+    [data-testid="stSidebar"] {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    @media (prefers-color-scheme: dark) {
+        [data-testid="stSidebar"] {
+            background: rgba(0, 0, 0, 0.3) !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    }
+
+    /* 3. Make Main Text Adapt to Light/Dark Mode */
     h1, h2, h3 {
         color: #111111 !important;
         text-align: center !important;
         font-weight: 600 !important;
     }
+    @media (prefers-color-scheme: dark) {
+        h1, h2, h3, p, span, label, .stMarkdown {
+            color: #ffffff !important;
+        }
+    }
     
-    /* 4. The "Download for Windows" Black Pill Button */
+    /* 4. The Login/Action Buttons (Vibrant Pink, White Text) */
     .stButton>button {
         border-radius: 50px !important;
-        background: #111111 !important;
+        background: linear-gradient(135deg, #E63C8A 0%, #ff758c 100%) !important;
         color: white !important;
         border: none !important;
         padding: 10px 24px !important;
-        font-weight: 500 !important;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
-        transition: all 0.2s ease;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 14px rgba(230, 60, 138, 0.3) !important;
+        transition: all 0.3s ease;
         display: block;
         margin: 0 auto; /* Centers the button */
     }
     .stButton>button:hover {
         transform: scale(1.05);
-        background: #333333 !important;
+        background: linear-gradient(135deg, #00C9B7 0%, #00F6A8 100%) !important;
+        box-shadow: 0 6px 20px rgba(0, 201, 183, 0.4) !important;
         color: white !important;
     }
 
-    /* 5. The Dark "Terminal/Editor" Window at the bottom (Chat Bubbles) */
+    /* 5. Chat Bubbles (Adapts to Light/Dark) */
     .stChatMessage {
-        background: rgba(20, 20, 22, 0.95) !important;
-        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.7) !important;
+        color: #111111 !important;
+        backdrop-filter: blur(10px);
         border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.1);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
         margin-top: 15px;
     }
     .stChatMessage * {
-        color: #e2e8f0 !important; /* Make chat text light gray/white */
+        color: #111111 !important; 
+    }
+    @media (prefers-color-scheme: dark) {
+        .stChatMessage {
+            background: rgba(20, 20, 22, 0.85) !important;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .stChatMessage * {
+            color: #e2e8f0 !important; 
+        }
     }
     
     /* Hide default Streamlit fluff */
@@ -152,8 +182,8 @@ elif st.session_state.get("authentication_status"):
             styles={
                 "container": {"padding": "0!important", "background-color": "transparent"},
                 "icon": {"color": "#111", "font-size": "18px"}, 
-                "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "rgba(255,255,255,0.2)", "border-radius":"10px", "color": "#111"},
-                "nav-link-selected": {"background-color": "rgba(255,255,255,0.4)", "box-shadow": "0 4px 10px rgba(0,0,0,0.1)", "color": "#111", "font-weight": "bold"},
+                "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "rgba(150,150,150,0.2)", "border-radius":"10px", "color": "#111"},
+                "nav-link-selected": {"background-color": "rgba(230, 60, 138, 0.2)", "box-shadow": "0 4px 10px rgba(0,0,0,0.05)", "color": "#E63C8A", "font-weight": "bold"},
             }
         )
         st.divider()
@@ -172,7 +202,7 @@ elif st.session_state.get("authentication_status"):
         st.markdown("""
             <div style='text-align: center; margin-bottom: 30px;'>
                 <h1 style='font-size: 3.5rem; margin-bottom: 0px;'>Study Buddy AI</h1>
-                <p style='color: #222; font-size: 1.2rem;'>A smart agent that helps you learn and study with AI.</p>
+                <p style='font-size: 1.2rem;'>A smart agent that helps you learn and study with AI.</p>
             </div>
         """, unsafe_allow_html=True)
         
@@ -194,7 +224,7 @@ elif st.session_state.get("authentication_status"):
             question_answer_chain = create_stuff_documents_chain(llm, prompt)
             rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
-            # Display previous chat history (Codex dark mode style)
+            # Display previous chat history
             for message in st.session_state.chat_history:
                 avatar_icon = "🧑‍🎓" if message["role"] == "user" else "🤖"
                 with st.chat_message(message["role"], avatar=avatar_icon):

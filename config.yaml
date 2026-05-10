@@ -1,12 +1,16 @@
 cookie:
-  expiry_days: 1
-  key: abcdef
-  name: study_buddy_cookie_v5
+  expiry_days: 30
+  key: random_signature_key
+  name: random_cookie_name
 credentials:
   usernames:
-    professor:
-      email: professor@university.edu
-      name: Professor Guide
-      password: $2b$12$N9Zq/0yNUKo.bH8/hM5sH.tCjL1z3.X0eO9y0hV9M9g.N9Zq/0yNU
+    akash:
+      email: akashreji647@gmail.com
+      first_name: Akash
+      last_name: Reji
+      logged_in: false
+      password: $2b$12$jErTnT9vmhscNQUamL3yeuDLtbk9Yr7PB5WKJZoS2Obwh2HGiJSYy
+      password_hint: reji
+      roles: null
 preauthorized:
   emails: []
